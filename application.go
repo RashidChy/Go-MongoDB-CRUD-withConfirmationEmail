@@ -29,11 +29,3 @@ func main() {
 	e.Logger.Fatal(e.Start(":3000"))
 
 }
-
-//func isHappy(n int) bool {
-//	var sum int
-//	for sum ==1{
-//		n%10
-//	}
-//	return false
-//}

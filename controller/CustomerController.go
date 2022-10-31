@@ -21,6 +21,27 @@ import (
 //
 //}
 
+func sendMail(customer model.Customer) error {
+	from := os.Getenv("EMAIL")
+	password := os.Getenv("EMAIL_PWD")
+	to := []string{customer.Email}
+	subject := "Account Creation Confirmation\n"
+	body := "Hello " + customer.Name + " your Registration has been confirmed.\n Welcome to Klovercloud"
+	// smtp - Simple Mail Transfer Protocol
+	host := "smtp.gmail.com"
+	port := "587"
+	address := host + ":" + port
+	// Set up authentication information.
+	auth := smtp.PlainAuth("", from, password, host)
+
+	msg := []byte(subject + body)
+	err := smtp.SendMail(address, auth, from, to, msg)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func CreateCustomer(c echo.Context) error {
 	client, err := database.InitDBConnection()
 	if err != nil {
@@ -66,26 +87,9 @@ func CreateCustomer(c echo.Context) error {
 
 	resp = model.Resp{Status: true, Message: "User Created Successfully, Please Check Your Email", Data: info}
 
-	////////////////// EMAILING  /////////////////////////////
+	// email
 
-	from := os.Getenv("EMAIL")
-	password := os.Getenv("EMAIL_PWD")
-	to := []string{info.Email}
-	subject := "Account Creation Confirmation\n"
-	body := "Hello " + info.Name + " your Registration has been confirmed.\n Welcome to Klovercloud"
-	// smtp - Simple Mail Transfer Protocol
-	host := "smtp.gmail.com"
-	port := "587"
-	address := host + ":" + port
-	// Set up authentication information.
-	auth := smtp.PlainAuth("", from, password, host)
-
-	msg := []byte(subject + body)
-	err = smtp.SendMail(address, auth, from, to, msg)
-	if err != nil {
-		return err
-	}
-	//////////////////////////////////////////////////////////////////
+	//go sendMail(info)
 
 	return c.JSON(http.StatusOK, resp)
 }
