@@ -41,6 +41,7 @@ func sendMail(customer model.Customer) error {
 	}
 	return nil
 }
+// 
 
 func CreateCustomer(c echo.Context) error {
 	client, err := database.InitDBConnection()
