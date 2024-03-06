@@ -18,7 +18,7 @@ import (
 
 //func (u *info) SendEmail(subject, HTMLbody string) error {
 //	// sender data
-//
+// hello
 //}
 
 func sendMail(customer model.Customer) error {
